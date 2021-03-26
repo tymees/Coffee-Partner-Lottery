@@ -11,6 +11,9 @@ participants_csv = "Coffee Partner Lottery participants.csv"
 header_name = "Your name:"
 header_email = "Your e-mail:"
 
+gamemaster_name = 'Example'
+gamemaster_email = 'example@example.org'
+
 # path to TXT file that stores the pairings of this round
 new_pairs_txt = "Coffee Partner Lottery new pairs.txt"
 
@@ -37,6 +40,10 @@ if os.path.exists(all_pairs_csv):
 # load participant's data
 formdata = pd.read_csv(participants_csv)
 
+if len(formdata)%2 != 0:
+    new_row = {header_name:gamemaster_name, header_email:gamemaster_email}
+    formdata = formdata.append(new_row, ignore_index=True)
+
 # create duplicate-free list of participants
 participants = list(set(formdata[header_email]))
 
@@ -51,27 +58,6 @@ new_pairs_found = False
 
 # try creating new pairing until successful
 while not new_pairs_found:   # to do: add a maximum number of tries
-  
-    # if odd number of participants, create one triple, then pairs
-    if len(participants)%2 != 0:
-        
-        # take three random participants from list of participants
-        p1 = random.choice(nparticipants)
-        nparticipants.remove(p1)
-    
-        p2 = random.choice(nparticipants)
-        nparticipants.remove(p2)
-        
-        p3 = random.choice(nparticipants)
-        nparticipants.remove(p3)
-        
-        # create alphabetically sorted list of participants
-        plist = [p1, p2, p3]
-        plist.sort()
-                        
-        # add alphabetically sorted list to set of pairs
-        npairs.add(tuple(plist))
-
   
     # while still participants left to pair...
     while len(nparticipants) > 0:
